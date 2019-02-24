@@ -111,9 +111,14 @@ class Storybooks extends Component {
           );
           aa = 1;
           this.setState({ select: this.state.books[cmd].url });
-          this.props.navigation.navigate("play", {
+          this.props.navigation.push("play", {
             url: this.state.books[cmd].url,
-            onGoBack: this.onGoBack
+            onGoBack: this.onGoBack,
+            name:this.state.books[cmd].name,
+            aname:this.state.books[cmd].author,
+            app: this.props.navigation.state.params.app,
+            str:"books/story/"+ this.state.books[cmd].key,
+            key:this.state.books[cmd].key
           });
         }
       }
@@ -132,7 +137,15 @@ class Storybooks extends Component {
         }}
         style={{ flex: 1 }}
       >
-        <Image source={require("./vision.png")} />
+        <Image
+          source={require("./visions.png")}
+          style={{
+            flex: 1,
+            width: null,
+            height: null,
+            resizeMode: "contain"
+          }}
+        />
       </TouchableHighlight>
     );
   }

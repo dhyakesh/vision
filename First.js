@@ -54,7 +54,15 @@ class First extends Component {
         }}
         style={{ flex: 1 }}
       >
-        <Image source={require("./vision.png")} />
+        <Image
+          source={require("./visionf.png")}
+          style={{
+            flex: 1,
+            width: null,
+            height: null,
+            resizeMode: "contain"
+          }}
+        />
       </TouchableHighlight>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { DeviceEventEmitter } from "react-native";
 import {
   Text,
   ScrollView,
@@ -8,18 +9,17 @@ import {
   BackAndroid,
   ToastAndroid
 } from "react-native";
-import { DeviceEventEmitter } from "react-native";
+import RNExitApp from "react-native-exit-app";
 import Tts from "react-native-tts";
 import Voice from "react-native-voice";
-import { StackActions, NavigationActions } from "react-navigation";
-import RNExitApp from "react-native-exit-app";
 class Academicbooks extends Component {
   constructor() {
     super();
+    //the speech results are bind which is declared below
     Voice.onSpeechResults = this.onSpeechResults;
   }
-  //the backbutton is masked and home button function is defined
   componentDidMount() {
+    //handle backpress and home button press is defined here
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
     DeviceEventEmitter.addListener("ON_HOME_BUTTON_PRESSED", () => {
       Tts.stop();
@@ -33,7 +33,7 @@ class Academicbooks extends Component {
   handleBackButton() {
     return true;
   }
-  // the books in academic area got from firebase (database)
+  //the available books is got from firebase (database) and the available options spoken out to users
   componentWillMount() {
     this.props.navigation.state.params.app
       .database()
@@ -43,18 +43,10 @@ class Academicbooks extends Component {
       })
       .then(this.onGoBack);
   }
-  navigateToWalkthrough = () => {
-    const navigateAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: "story" })]
-    });
-
-    this.props.navigation.dispatch(navigateAction);
-  };
-  //the back from screen, then this will be executed
+  //when back after navigating the this function gets executed
   onGoBack = () => {
     Tts.setDefaultRate(0.4);
-    Tts.speak("Academic books ,the available books are ");
+    Tts.speak("academic books ,the available books are ");
     for (x in this.state.books) {
       Tts.speak(this.state.books[x].name);
     }
@@ -68,16 +60,17 @@ class Academicbooks extends Component {
     results: [],
     select: "nothing"
   };
-  //double tap function is defined here
+  //double tap method is implemented
   lastTap = null;
   handleDoubleTap = () => {
     const now = new Date().getTime();
     const DOUBLE_PRESS_DELAY = 700;
     x = this.lastTap && now - this.lastTap < DOUBLE_PRESS_DELAY;
     if (x) {
+      //if double tapped then repeat the instructions
       Voice.cancel();
       Tts.setDefaultRate(0.4);
-      Tts.speak("academic books ,the available books are ");
+      Tts.speak("Academic books ,the available books are ");
       for (x in this.state.books) {
         Tts.speak(this.state.books[x].name);
       }
@@ -85,7 +78,7 @@ class Academicbooks extends Component {
         "tap the screen and select a book or to goback to previous menu long press"
       );
     } else {
-      //single tap is used to input the voice command
+      //else voice command is accepted
       this.lastTap = now;
       this.setState({
         results: []
@@ -104,8 +97,8 @@ class Academicbooks extends Component {
     this.setState({
       results: e.value
     });
+    //if the commmands matches then navigation takes place else user is intimated with speak again
     var aa = 0;
-    //the entred command is checked with the availabe commands if present then navigated else try again is spoken
     for (x in e.value) {
       for (cmd in this.state.books) {
         if (
@@ -118,9 +111,14 @@ class Academicbooks extends Component {
           );
           aa = 1;
           this.setState({ select: this.state.books[cmd].url });
-          this.props.navigation.navigate("play", {
+          this.props.navigation.push("play", {
             url: this.state.books[cmd].url,
-            onGoBack: this.onGoBack
+            onGoBack: this.onGoBack,
+            name:this.state.books[cmd].name,
+            aname:this.state.books[cmd].author,
+            app: this.props.navigation.state.params.app,
+            str:"books/academic/"+ this.state.books[cmd].key,
+            key:this.state.books[cmd].key
           });
         }
       }
@@ -131,28 +129,26 @@ class Academicbooks extends Component {
   };
   render() {
     return (
-      <ScrollView>
-        <Text>Academicbooks</Text>
-        <Text>the available books are </Text>
-        {this.state.books.map((book, index) => (
-          <Text key={index}>{book.name}</Text>
-        ))}
-        <TouchableHighlight
-          onPress={this.handleDoubleTap}
-          onLongPress={() => {
-            Tts.stop();
-            this.props.navigation.push("Home");
+      <TouchableHighlight
+        onPress={this.handleDoubleTap}
+        onLongPress={() => {
+          Tts.stop();
+          this.props.navigation.push("Home");
+        }}
+        style={{ flex: 1 }}
+      >
+        <Image
+          source={require("./visions.png")}
+          style={{
+            flex: 1,
+            width: null,
+            height: null,
+            resizeMode: "contain"
           }}
-        >
-          <Image source={require("./vision.png")} />
-        </TouchableHighlight>
-        {this.state.results.map((result, index) => {
-          return <Text key={`result-${index}`}>{result}</Text>;
-        })}
-      </ScrollView>
+        />
+      </TouchableHighlight>
     );
   }
-  //snapshot is converted to the array
   snapshotToArray = snapshot => {
     var returnArr = [];
 

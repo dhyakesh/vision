@@ -15,12 +15,12 @@ import Tts from "react-native-tts";
 const firebase = require("firebase");
 //the config for the firebase
 var config = {
-  apiKey: "aaaaaaaaaaaaaaaaaaaaaa",
-  authDomain: "vision.firebaseapp.com",
-  databaseURL: "https://vision.firebaseio.com",
-  projectId: "vision",
-  storageBucket: "vision.appspot.com",
-  messagingSenderId: "55677827682618"
+  apiKey: "AIzaSyDO6tNkGcSGQVunHyNeEo-GAJDeNFoU2Vc",
+  authDomain: "vision-43124.firebaseapp.com",
+  databaseURL: "https://vision-43124.firebaseio.com",
+  projectId: "vision-43124",
+  storageBucket: "vision-43124.appspot.com",
+  messagingSenderId: "519317610341"
 };
 //initialize the firebase
 const app = firebase.initializeApp(config);
@@ -129,7 +129,15 @@ class Home extends Component {
         }}
         style={{ flex: 1 }}
       >
-        <Image source={require("./vision.png")} />
+        <Image
+          source={require("./visionh.png")}
+          style={{
+            flex: 1,
+            width: null,
+            height: null,
+            resizeMode: "contain"
+          }}
+        />
       </TouchableHighlight>
     );
   }
