@@ -1,12 +1,12 @@
 const firebase = require("firebase");
 //the config for the firebase
 var config = {
-  apiKey: "AIzaSyDO6tNkGcSGQVunHyNeEo-GAJDeNFoU2Vc",
-  authDomain: "vision-43124.firebaseapp.com",
-  databaseURL: "https://vision-43124.firebaseio.com",
+  apiKey: "AAAAc",
+  authDomain: "AAAAAA",
+  databaseURL: "AAAAAA",
   projectId: "vision-43124",
-  storageBucket: "vision-43124.appspot.com",
-  messagingSenderId: "519317610341"
+  storageBucket: "AAAAAAAAA",
+  messagingSenderId: "AAAAAAA"
 };
 const app = firebase.initializeApp(config);
 const data=(str)=>{
